@@ -13,3 +13,5 @@ thread.start();
   
 4.ThreadPool:优点，将任务提交和执行解耦，线程池全部是基于RunnableTask和Callable接口来实现的，提交的Runnable也全部是转换成Callable类
 实现，想想也是线程池是后面版本才出来，而且Future和Callable是功能最为强大的线程实现方式，当然要使用最强大的，保证这个框架能够应付各种情况。
+
+5.线程的转态：新建（new） 运行（Running and Runnable） 等待（wait） 超时等待（Timed_wait） 终止（stop）
