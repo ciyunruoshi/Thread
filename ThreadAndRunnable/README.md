@@ -15,3 +15,32 @@ thread.start();
 实现，想想也是线程池是后面版本才出来，而且Future和Callable是功能最为强大的线程实现方式，当然要使用最强大的，保证这个框架能够应付各种情况。
 
 5.线程的转态：新建（new） 运行（Running and Runnable） 等待（wait） 超时等待（Timed_wait） 终止（stop）
+
+6.```Executors```提供和很多构建不同线程池的方法，但是不允许使用此类创建线程池,为什么？
+```
+public class Executors {
+   public static ExecutorService newFixedThreadPool(int nThreads) {
+        return new ThreadPoolExecutor(nThreads, nThreads,
+                                      0L, TimeUnit.MILLISECONDS,
+                                      new LinkedBlockingQueue<Runnable>());
+    }
+    
+    
+    public static ExecutorService newSingleThreadExecutor() {
+        return new FinalizableDelegatedExecutorService
+            (new ThreadPoolExecutor(1, 1,
+                                    0L, TimeUnit.MILLISECONDS,
+                                    new LinkedBlockingQueue<Runnable>()));
+    }
+    
+    public static ExecutorService newCachedThreadPool() {
+        return new ThreadPoolExecutor(0, Integer.MAX_VALUE,
+                                      60L, TimeUnit.SECONDS,
+                                      new SynchronousQueue<Runnable>());
+    }
+}
+```
+可以看到```Executors```提供的方法都是由```ThreadPoolExecutor```类实现，而从参数上来看```new LinkedBlockingQueue<Runnable>()```提供的是
+链表实现的阻塞队列，而默认的链表阻塞队列的容量是无限的，那么这会导致什么问题？
+
+可以一直```submit()```Runnable实例，会耗尽内存并且溢出。
